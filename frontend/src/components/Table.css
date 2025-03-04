@@ -1,42 +1,58 @@
-/* table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-top: 20px;
- }
- 
- table th, table td {
-	padding: 8px;
-	border: 1px solid #ddd;
-	text-align: left;
- }
- 
- table th {
-	background-color: #f4f4f4;
- }
- 
- table tr:hover {
-	background-color: #f1f1f1;
- }
 
- /* Make the grid container look neat */
-/* .MuiDataGrid-root {
-	border-radius: 8px;
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.MuiDataGrid-root {
+	width: 100% !important; 
+	overflow-x: auto; 
+}
+ 
+ 
+.MuiBox-root {
+	padding: 16px; 
+}
+ 
+ 
+
+@media screen and (max-width: 600px) {
+	.MuiDataGrid-root {
+	  display: block; 
+	  overflow-x: auto; 
+	  white-space: nowrap; 
+	}
+	
+	
+	.MuiDataGrid-cell {
+	  font-size: 12px;
+	  padding: 4px 6px; 
+	}
+ 
+	.MuiDataGrid-columnHeaderTitle {
+	  font-size: 14px;
+	}
+ 
+	
+	.MuiDataGrid-cellContent {
+	  word-wrap: break-word;
+	  overflow-wrap: break-word;
+	}
+ 
+	
+	.MuiBox-root {
+	  overflow-x: auto;
+	  width: 100%;
+	  display: block;
+	}
  }
  
- .MuiDataGrid-columnHeader {
-	background-color: #34495e;
-	color: white;
-	font-weight: bold;
- }
  
- .MuiDataGrid-row {
-	background-color: #f4f8fb;
- }
  
- .MuiButton-root {
-	font-size: 1rem;
-	padding: 10px 20px;
-	border-radius: 6px;
-	margin-top: 10px;
- } */
+@media screen and (max-width: 400px) {
+	.MuiTypography-root {
+	  font-size: 12px; 
+	}
+ 
+	
+	.MuiButton-root {
+	  font-size: 10px; 
+	  padding: 6px 10px; 
+	}
+}
+ 

@@ -32,7 +32,8 @@ const Table: React.FC = () => {
     }
     };  
     fetchCertificates();
-  }, []); 
+  }, []);
+
   const handleDownload = async () => {
     if (selectedRows.length === 0) {
       alert("Please select at least one certificate to download.");
@@ -75,6 +76,7 @@ const Table: React.FC = () => {
       }
     });
   };
+
   const handleDelete = async () => {
     if (selectedRows.length === 0) {
       alert("Please select at least one certificate to delete.");
@@ -116,25 +118,38 @@ const Table: React.FC = () => {
     },
   ];  
   return (
-    <Box sx={{ padding: 3, overflowX: "auto" }}>
+    <Box sx={{ padding: 3, overflowX: "auto", width: "100%" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap" }}>
         <Typography variant="h6">Certificate Manager</Typography>
-        <Box>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Button
             variant="contained"
             color="primary"
             startIcon={<CloudDownload />}
             onClick={handleDownload}
-            sx={{ mr: 2 }}
+            sx={{ mr: 2, mb: 2 }}
           >
             Download
           </Button>
-          <Button variant="contained" color="error" startIcon={<Delete />} onClick={handleDelete}>
+          <Button
+            variant="contained"
+            color="error"
+            startIcon={<Delete />}
+            onClick={handleDelete}
+            sx={{ mb: 2 }}
+          >
             Delete
           </Button>
         </Box>
-      </Toolbar>  
-      <Box sx={{ height: "50%", width: "100%", overflowX: "auto"  , position: "relative", minWidth: "800px"}}>
+      </Toolbar>
+      <Box
+        sx={{
+          height: "50%",
+          width: "100%",
+          overflowX: "auto",
+          position: "relative",
+        }}
+      >
         <DataGrid
           rows={certificates}
           columns={columns}
@@ -143,6 +158,17 @@ const Table: React.FC = () => {
           checkboxSelection
           onRowSelectionModelChange={(ids) => setSelectedRows(ids as number[])}
           onPaginationModelChange={setPaginationModel}
+          sx={{
+            '& .MuiDataGrid-root': {
+              border: 'none',
+            },
+            '& .MuiDataGrid-cell': {
+              wordBreak: 'break-word',
+            },
+            '& .MuiDataGrid-columnHeaderTitle': {
+              fontSize: '14px',
+            },
+          }}
         />
       </Box>
     </Box>
