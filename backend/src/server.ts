@@ -8,7 +8,7 @@ export const prisma = new PrismaClient()
 const app = express()
 app.use(express.urlencoded({ extended: true }));
 const port = 8080
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
     level: 'info',
     format: winston.format.combine(
         winston.format.timestamp(),

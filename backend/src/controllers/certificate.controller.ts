@@ -5,6 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import * as mime from 'mime-types';
 import { v4 as uuidv4 } from 'uuid';
+import { logger } from '../server';
 
 const createCertificate = async (req: Request, res: Response) => {
     try {
@@ -37,9 +38,14 @@ const createCertificate = async (req: Request, res: Response) => {
           },
         });   
         res.status(201).json(newCertificate);
-    } catch (e) {
-        res.status(500).json({ error: 'Error saving certificate' });
-    }
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        logger.error(`Error saving certificate: ${e.message}`, { stack: e.stack });
+      } else {
+        logger.error('An unknown error occurred', { error: e });
+      }
+      res.status(500).json({ error: 'Error saving certificate' });
+  }
 };
 
 const getCertificates = async (req: Request, res: Response) => {
@@ -54,10 +60,14 @@ const getCertificates = async (req: Request, res: Response) => {
             },
         });
         res.status(200).json(certificates);
-    } catch (e) {
-        console.error(e)
-        res.status(500).json({ error: e })
-    }
+    }  catch (e: unknown) { 
+      if (e instanceof Error) { 
+          logger.error(`Error fetching certificates: ${e.message}`, { stack: e.stack });
+      } else {  
+          logger.error('An unknown error occurred', { error: e });
+      }
+      res.status(500).json({ error: e instanceof Error ? e.message : 'An unknown error occurred' });
+  }
 }
 
 const downloadCertificate = async (req: Request, res: Response) => {
@@ -84,9 +94,14 @@ const downloadCertificate = async (req: Request, res: Response) => {
         res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
         res.setHeader("Content-Type", mimeType);  
         return res.status(200).download(filePath);
-    } catch (error) {
-        res.status(500).json({ error: "Error downloading file" });
-    }
+    } catch (e: unknown) { 
+      if (e instanceof Error) { 
+          logger.error(`Error downloading certificate: ${e.message}`, { stack: e.stack });
+      } else {    
+          logger.error('An unknown error occurred', { error: e });
+      }
+      res.status(500).json({ error: "Error downloading file" });
+  }
 };
 
 const deleteCertificate = async (req: Request, res: Response) => {
@@ -115,9 +130,14 @@ const deleteCertificate = async (req: Request, res: Response) => {
           where: { id: Number(id) },
         }); 
         res.status(200).json({ message: "Certificate deleted successfully" });
-    } catch (error) {
-        res.status(500).json({ error: "Error deleting certificate" });
-    }
+    } catch (e: unknown) { 
+      if (e instanceof Error) { 
+          logger.error(`Error deleting certificate: ${e.message}`, { stack: e.stack });
+      } else {          
+          logger.error('An unknown error occurred', { error: e });
+      }
+      res.status(500).json({ error: "Error deleting certificate" });
+  }
 };
 
 export default {

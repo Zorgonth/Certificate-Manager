@@ -68,7 +68,6 @@ const CreateCertificate = ({ onCreate }: { onCreate: () => void }) => {
       if (fileInputRef.current) fileInputRef.current.value = ""; 
       setError("");
     } catch (error: any) {
-      console.error("Error creating certificate:", error);
       setError(error.response?.data?.message || "Network error. Please try again later.");
     }
   };

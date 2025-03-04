@@ -1,0 +1,11 @@
+-- CreateTable
+CREATE TABLE "Certificate" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "provider" TEXT NOT NULL,
+    "issued_at" DATETIME NOT NULL,
+    "expires_at" DATETIME,
+    "filename" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
