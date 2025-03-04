@@ -1,43 +1,30 @@
-// src/App.js
-import React, { useState } from 'react';
-import './App.css';
-import Table from './components/Table';
-import CreateCertificate from './components/CreateCertificate';
-import Navbar from './components/Navbar';
+import React, { useState } from "react";
+import "./App.css";
+import Table from "./components/Table";
+import CreateCertificate from "./components/CreateCertificate";
+import Navbar from "./components/Navbar";
+import Home from "./components/MainPage";
 
-function App() {
-  const [isCreateCertificateVisible, setCreateCertificateVisible] = useState(false);
-  const [isTableVisible, setTableVisible] = useState(false);
+type Page = "home" | "create" | "view";
 
-  const handleCreateToggle = () => {
-    setCreateCertificateVisible(!isCreateCertificateVisible);
-  };
+const App: React.FC = () => {
+  const [activePage, setActivePage] = useState<Page>("home");
 
-  const handleTableToggle = () => {
-    setTableVisible(!isTableVisible);
+  const handleCertificateCreated = () => {
+    setActivePage("view");
   };
 
   return (
     <div className="App">
-      <Navbar /> {/* Add the Navbar here */}
+      <Navbar setActivePage={setActivePage} />
 
-      <h1>Certificate Management</h1>
-
-      <div className="button-container">
-        <button onClick={handleCreateToggle}>
-          {isCreateCertificateVisible ? 'Hide Certificate Form' : 'Show Certificate Form'}
-        </button>
-        <button onClick={handleTableToggle}>
-          {isTableVisible ? 'Hide Certificates Table' : 'Show Certificates Table'}
-        </button>
-      </div>
-
-      <div className={`components-container ${isCreateCertificateVisible || isTableVisible ? 'showing-one' : ''}`}>
-        {isCreateCertificateVisible && <CreateCertificate onCreate={handleTableToggle} />}
-        {isTableVisible && <Table />}
+      <div className="content">
+        {activePage === "home" && <Home />}
+        {activePage === "create" && <CreateCertificate onCreate={handleCertificateCreated} />}
+        {activePage === "view" && <Table />}
       </div>
     </div>
   );
-}
+};
 
 export default App;
