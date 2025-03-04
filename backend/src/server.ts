@@ -6,6 +6,7 @@ import winston from 'winston'
 export const prisma = new PrismaClient()
 
 const app = express()
+app.use(express.urlencoded({ extended: true }));
 const port = 8080
 const logger = winston.createLogger({
     level: 'info',
@@ -30,16 +31,13 @@ async function main() {
     app.use(express.json())
 
     app.use(function (req, res, next) {
-        res.setHeader('Access-Control-Allow-Origin', '*')
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
-        next()
-    })
-
-    // Register API routes
+        res.setHeader('Access-Control-Allow-Origin', '*'); 
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE'); 
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, certificate-id');
+        res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
+        next();
+    });
     app.use('/api/v1/certificates', CertificateRouter)
-
-    // Catch unregistered routes
     app.all('*', (req: Request, res: Response) => {
         const errorMessage = `Route ${req.originalUrl} not found`
         logger.error(errorMessage)
@@ -51,12 +49,10 @@ async function main() {
     })
 
     process.on('uncaughtException', (error) => {
-        // Handle the uncaught exception here (e.g., log it)
         logger.error(`Uncaught Exception: ${error.message}`)
     })
 
     process.on('unhandledRejection', (reason, promise) => {
-        // Handle unhandled promise rejections here (e.g., log them)
         logger.error(`Unhandled Promise Rejection: ${reason}`)
     })
 }
