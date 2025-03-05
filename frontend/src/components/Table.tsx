@@ -119,15 +119,25 @@ const Table: React.FC = () => {
   ];  
   return (
     <Box sx={{ padding: 3, overflowX: "auto", width: "100%" }}>
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap" }}>
-        <Typography variant="h6">Certificate Manager</Typography>
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <Toolbar
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          flexDirection: { xs: "column", sm: "row" },
+          alignItems: "center",
+        }}
+      >
+        {/* {error && <div className="error-message">{error}</div>} */}
+        <Typography variant="h6" sx={{ textAlign: { xs: "center", sm: "left" } }}>
+          Certificate Manager
+        </Typography>
+        <Box className="button-container">
           <Button
             variant="contained"
             color="primary"
             startIcon={<CloudDownload />}
             onClick={handleDownload}
-            sx={{ mr: 2, mb: 2 }}
           >
             Download
           </Button>
@@ -136,7 +146,6 @@ const Table: React.FC = () => {
             color="error"
             startIcon={<Delete />}
             onClick={handleDelete}
-            sx={{ mb: 2 }}
           >
             Delete
           </Button>

@@ -74,8 +74,8 @@ const CreateCertificate = ({ onCreate }: { onCreate: () => void }) => {
 
   return (
     <div className="create-certificate">
-      <h3>Upload Your Certificate</h3>
       {error && <div className="error-message">{error}</div>}
+      <h3>Upload Your Certificate</h3>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Certificate Name</label>
