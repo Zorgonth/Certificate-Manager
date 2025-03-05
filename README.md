@@ -44,5 +44,13 @@
    # This starts the React application
    npm run start
    ```
+
+3. To run The backend tests using jest, follow these steps:
+   ```sh
+   # from the root directory
+   cd backend
    
+   # This runs all the tests that are in the __tests__ directory
+   npx jest
+   ```
 You are ready! Happy coding :)
