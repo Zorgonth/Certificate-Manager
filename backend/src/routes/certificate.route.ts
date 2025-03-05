@@ -9,4 +9,5 @@ router.get('/getall', PostController.getCertificates)
 router.post('/create',upload.single("file"), PostController.createCertificate)
 router.get('/download', PostController.downloadCertificate)
 router.delete('/delete', PostController.deleteCertificate)
+router.get('/downloadall', PostController.downloadAllCertificates)
 export default router

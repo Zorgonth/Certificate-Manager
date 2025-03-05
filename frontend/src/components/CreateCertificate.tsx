@@ -59,7 +59,6 @@ const CreateCertificate = ({ onCreate }: { onCreate: () => void }) => {
         },
       });
       onCreate();
-
       setName("");
       setProvider("");
       setIssuedAt("");
@@ -68,7 +67,7 @@ const CreateCertificate = ({ onCreate }: { onCreate: () => void }) => {
       if (fileInputRef.current) fileInputRef.current.value = ""; 
       setError("");
     } catch (error: any) {
-      setError(error.response?.data?.message || "Network error. Please try again later.");
+      setError(error.response?.data?.error || "Network error. Please try again later.");
     }
   };
 

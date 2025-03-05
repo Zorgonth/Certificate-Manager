@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.4.1",
+    "archiver": "^7.0.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mime-types": "^2.1.35",

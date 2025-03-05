@@ -3,6 +3,7 @@ import { prisma } from '../server'
 import {Certificate} from "../interfaces/certificate";
 import path from 'path';
 import fs from 'fs';
+import archiver from 'archiver';
 import * as mime from 'mime-types';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from '../server';
@@ -19,7 +20,7 @@ const createCertificate = async (req: Request, res: Response) => {
         const expirationDate = expires_at ? new Date(expires_at) : null;  
         if (expirationDate && expirationDate <= issuedDate) {
           return res.status(400).json({ error: 'Expiration date must be after the issued date' });
-        } 
+        }
         const mimeType = mime.lookup(file.originalname);
         const extension = mime.extension(mimeType);
         if (!extension) {
@@ -68,7 +69,7 @@ const getCertificates = async (req: Request, res: Response) => {
       }
       res.status(500).json({ error: e instanceof Error ? e.message : 'An unknown error occurred' });
   }
-}
+};
 
 const downloadCertificate = async (req: Request, res: Response) => {
     try {
@@ -119,9 +120,8 @@ const deleteCertificate = async (req: Request, res: Response) => {
         }   
         if (certificate.filename) {
           const filePath = path.join(__dirname, '../../uploads', certificate.filename);
-          fs.unlink(filePath, (err) => {
+          await fs.unlink(filePath, (err) => {
             if (err) {
-              console.error("Error deleting file:", err);
               return res.status(500).json({ error: "Error deleting certificate file" });
             }
           });
@@ -140,9 +140,47 @@ const deleteCertificate = async (req: Request, res: Response) => {
   }
 };
 
+const downloadAllCertificates = async (req: Request, res: Response) => {
+  try {
+      const certificates = await prisma.certificate.findMany({
+          select: { filename: true, name: true },
+      });
+      if (certificates.length === 0) {
+          return res.status(404).json({ error: "No certificates found" });
+      }
+      const archive = archiver('zip', {
+          zlib: { level: 9 },
+      });
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', 'attachment; filename="certificates.zip"');
+      archive.pipe(res);
+      for (const certificate of certificates) {
+          const filePath = path.join(__dirname, '../../uploads', certificate.filename);   
+          if (fs.existsSync(filePath)) {
+              const mimeType = mime.lookup(filePath);
+              const extension = mime.extension(mimeType);
+              const filename = `${certificate.name}.${extension}`;
+              archive.append(fs.createReadStream(filePath), { name: filename });
+          } else {
+              logger.error(`File not found: ${filePath}`);
+          }
+      }
+      archive.finalize();
+  } catch (e: unknown) {
+      if (e instanceof Error) {
+          logger.error(`Error creating zip file: ${e.message}`, { stack: e.stack });
+      } else {
+          logger.error('An unknown error occurred', { error: e });
+      }
+      res.status(500).json({ error: "Error generating zip file" });
+  }
+};
+
+
 export default {
     createCertificate,
     getCertificates,
     downloadCertificate,
     deleteCertificate,
+    downloadAllCertificates,
 }

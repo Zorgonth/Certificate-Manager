@@ -69,10 +69,25 @@ const Table: React.FC = () => {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
-      } catch (error) {
-        setError("Failed to download certificate.");
+      } catch (error: any) {
+        setError(error.response?.data?.error || "Network error. Please try again later.");
       }
     });
+  };
+  const handleDownloadAll = async () => {
+    try {
+        const response = await axios.get('/certificates/downloadall', {
+            responseType: 'blob',
+        });
+        const blob = new Blob([response.data], { type: 'application/zip' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'certificates.zip';
+        link.click();
+        URL.revokeObjectURL(link.href);
+    } catch (error: any) {
+      setError(error.response?.data?.error || "Network error. Please try again later.");
+    }
   };
 
   const handleDelete = async () => {
@@ -91,8 +106,8 @@ const Table: React.FC = () => {
       );
       alert("Certificates deleted successfully!");
       window.location.reload();
-    } catch (error) {
-      setError("Failed to delete certificates.");
+    } catch (error: any) {
+      setError(error.response?.data?.error || "Network error. Please try again later.");
     }
   };
   const columns: GridColDef[] = [
@@ -151,7 +166,7 @@ const Table: React.FC = () => {
           variant="contained"
           color="primary"
           startIcon={<CloudDownload />}
-          // onClick={handleDownloadAll}
+          onClick={handleDownloadAll}
         >
           Download All
         </Button>
