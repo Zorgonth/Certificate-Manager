@@ -27,7 +27,6 @@ const Table: React.FC = () => {
       setCertificates(response.data || []);
       setError("");
     } catch (err) {
-      console.error("Error fetching certificates:", err);
       setError("Failed to load certificates. Please try again later.");
     }
     };  
@@ -71,15 +70,14 @@ const Table: React.FC = () => {
         link.remove();
         window.URL.revokeObjectURL(url);
       } catch (error) {
-        console.error("Error downloading certificate:", error);
-        alert("Failed to download certificate.");
+        setError("Failed to download certificate.");
       }
     });
   };
 
   const handleDelete = async () => {
     if (selectedRows.length === 0) {
-      alert("Please select at least one certificate to delete.");
+      setError("Please select at least one certificate to delete.");
       return;
     }
     if (!window.confirm("Are you sure you want to delete the selected certificates?")) return;
@@ -94,8 +92,7 @@ const Table: React.FC = () => {
       alert("Certificates deleted successfully!");
       window.location.reload();
     } catch (error) {
-      console.error("Error deleting certificates:", error);
-      alert("Failed to delete certificates.");
+      setError("Failed to delete certificates.");
     }
   };
   const columns: GridColDef[] = [
@@ -118,70 +115,88 @@ const Table: React.FC = () => {
     },
   ];  
   return (
-    <Box sx={{ padding: 3, overflowX: "auto", width: "100%" }}>
-      <Toolbar
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          flexWrap: "wrap",
-          flexDirection: { xs: "column", sm: "row" },
-          alignItems: "center",
-        }}
-      >
-        {/* {error && <div className="error-message">{error}</div>} */}
-        <Typography variant="h6" sx={{ textAlign: { xs: "center", sm: "left" } }}>
-          Certificate Manager
-        </Typography>
-        <Box className="button-container">
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<CloudDownload />}
-            onClick={handleDownload}
-          >
-            Download
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            startIcon={<Delete />}
-            onClick={handleDelete}
-          >
-            Delete
-          </Button>
-        </Box>
-      </Toolbar>
-      <Box
-        sx={{
-          height: "50%",
-          width: "100%",
-          overflowX: "auto",
-          position: "relative",
-        }}
-      >
-        <DataGrid
-          rows={certificates}
-          columns={columns}
-          paginationModel={paginationModel}
-          pageSizeOptions={[10, 20, 30]}
-          checkboxSelection
-          onRowSelectionModelChange={(ids) => setSelectedRows(ids as number[])}
-          onPaginationModelChange={setPaginationModel}
-          sx={{
-            '& .MuiDataGrid-root': {
-              border: 'none',
-            },
-            '& .MuiDataGrid-cell': {
-              wordBreak: 'break-word',
-            },
-            '& .MuiDataGrid-columnHeaderTitle': {
-              fontSize: '14px',
-            },
-          }}
-        />
+  <Box sx={{ 
+    padding: 3, 
+    display: "flex", 
+    flexDirection: "column", 
+    alignItems: "center", 
+    justifyContent: "center", 
+    width: "90%", 
+    margin: "0 auto" 
+  }}>
+    <Toolbar
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        flexWrap: "wrap",
+        flexDirection: { xs: "column", sm: "row" },
+        alignItems: "center",
+        width: "100%"
+      }}
+    >
+      {error && <div className="error-message">{error}</div>}
+      <Typography variant="h6" sx={{ textAlign: { xs: "center", sm: "left" } }}>
+        Certificate Manager
+      </Typography>
+      <Box className="button-container">
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<CloudDownload />}
+          onClick={handleDownload}
+        >
+          Download
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<CloudDownload />}
+          // onClick={handleDownloadAll}
+        >
+          Download All
+        </Button>
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<Delete />}
+          onClick={handleDelete}
+        >
+          Delete
+        </Button>
       </Box>
+    </Toolbar>
+
+    <Box
+      sx={{
+        width: "100%",
+        overflowX: "auto",
+        display: "flex",
+        justifyContent: "center",
+      }}
+      >
+      <DataGrid
+        rows={certificates}
+        columns={columns}
+        paginationModel={paginationModel}
+        pageSizeOptions={[10, 20, 30]}
+        checkboxSelection
+        onRowSelectionModelChange={(ids) => setSelectedRows(ids as number[])}
+        onPaginationModelChange={setPaginationModel}
+        sx={{
+          width: "100%",
+          '& .MuiDataGrid-root': {
+            border: 'none',
+          },
+          '& .MuiDataGrid-cell': {
+            wordBreak: 'break-word',
+          },
+          '& .MuiDataGrid-columnHeaderTitle': {
+            fontSize: '14px',
+          },
+        }}
+      />
     </Box>
-  );
-};
+  </Box>
+)};
 
 export default Table;

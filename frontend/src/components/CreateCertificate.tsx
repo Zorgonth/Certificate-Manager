@@ -73,32 +73,34 @@ const CreateCertificate = ({ onCreate }: { onCreate: () => void }) => {
   };
 
   return (
-    <div className="create-certificate">
-      {error && <div className="error-message">{error}</div>}
-      <h3>Upload Your Certificate</h3>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="name">Certificate Name</label>
-          <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
-        </div>
-        <div className="form-group">
-          <label htmlFor="provider">Provider</label>
-          <input type="text" id="provider" value={provider} onChange={(e) => setProvider(e.target.value)} required />
-        </div>
-        <div className="form-group">
-          <label htmlFor="issuedAt">Issue Date</label>
-          <input type="date" id="issuedAt" value={issuedAt} onChange={(e) => setIssuedAt(e.target.value)} required />
-        </div>
-        <div className="form-group">
-          <label htmlFor="expiresAt">Expiry Date (optional)</label>
-          <input type="date" id="expiresAt" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="file">Certificate File (PDF, PNG, JPEG)</label>
-          <input type="file" id="file" ref={fileInputRef} onChange={handleFileChange} accept=".pdf,.png,.jpg,.jpeg" required />
-        </div>
-        <button type="submit">Create Certificate</button>
-      </form>
+    <div className="create-certificate-container">
+      <div className="create-certificate">
+        {error && <div className="error-message">{error}</div>}
+        <h3>Upload Your Certificate</h3>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="name">Certificate Name</label>
+            <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="provider">Provider</label>
+            <input type="text" id="provider" value={provider} onChange={(e) => setProvider(e.target.value)} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="issuedAt">Issue Date</label>
+            <input type="date" id="issuedAt" value={issuedAt} onChange={(e) => setIssuedAt(e.target.value)} required />
+          </div>
+          <div className="form-group">
+            <label htmlFor="expiresAt">Expiry Date (optional)</label>
+            <input type="date" id="expiresAt" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="file">Certificate File (PDF, PNG, JPEG)</label>
+            <input type="file" id="file" ref={fileInputRef} onChange={handleFileChange} accept=".pdf,.png,.jpg,.jpeg" required />
+          </div>
+          <button type="submit">Create Certificate</button>
+        </form>
+      </div>
     </div>
   );
 };
