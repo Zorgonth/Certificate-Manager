@@ -13,7 +13,7 @@ const CreateCertificate = ({ onCreate }: { onCreate: () => void }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
+    if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files[0];
 
       const allowedTypes = ["application/pdf", "image/png", "image/jpeg"];
