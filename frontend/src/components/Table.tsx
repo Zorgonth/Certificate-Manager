@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useEffect, useState } from "react";
 import { JSX, FC } from "react";
 import { DataGrid, GridColDef, GridPaginationModel, GridRowSelectionModel } from "@mui/x-data-grid";
@@ -29,8 +28,12 @@ const Table: FC = (): JSX.Element => {
         const response = await axios.get<Certificate[]>("/certificates/getall");
         setCertificates(response.data || []);
         setError("");
-      } catch (err) {
-        setError("Failed to load certificates. Please try again later.");
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          setError(error.response?.data?.error || "Network error. Please try again later.");
+        } else {
+          setError("Unknown error occurred.");
+        }
       }
     };
 
@@ -76,8 +79,12 @@ const Table: FC = (): JSX.Element => {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
-      } catch (error: any) {
-        setError(error.response?.data?.error || "Network error. Please try again later.");
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          setError(error.response?.data?.error || "Network error. Please try again later.");
+        } else {
+          setError("Unknown error occurred.");
+        }
       }
     }
   )};
@@ -93,8 +100,12 @@ const Table: FC = (): JSX.Element => {
       link.download = "certificates.zip";
       link.click();
       URL.revokeObjectURL(link.href);
-    } catch (error: any) {
-      setError(error.response?.data?.error || "Network error. Please try again later.");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.error || "Network error. Please try again later.");
+      } else {
+        setError("Unknown error occurred.");
+      }
     }
   };
 
@@ -113,9 +124,14 @@ const Table: FC = (): JSX.Element => {
         })
       );
       alert("Certificates deleted successfully!");
-      window.location.reload();
-    } catch (error: any) {
-      setError(error.response?.data?.error || "Network error. Please try again later.");
+      setCertificates((prev) => prev.filter((c) => !selectedRows.includes(c.id)));
+      setSelectedRows([]);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.error || "Network error. Please try again later.");
+      } else {
+        setError("Unknown error occurred.");
+      }
     }
   };
 
@@ -194,9 +210,10 @@ const Table: FC = (): JSX.Element => {
           paginationModel={paginationModel}
           pageSizeOptions={[10, 20, 30]}
           checkboxSelection
-          onRowSelectionModelChange={(ids: GridRowSelectionModel) =>
-            setSelectedRows(ids.filter((id) => typeof id === "number") as number[])
-          }
+          onRowSelectionModelChange={(ids: GridRowSelectionModel) => {
+            const selectedIds = ids.map((id) => Number(id));
+            setSelectedRows(selectedIds);
+           }}
           onPaginationModelChange={setPaginationModel}
           sx={{
             width: "100%",

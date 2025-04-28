@@ -66,8 +66,12 @@ const CreateCertificate = ({ onCreate }: { onCreate: () => void }) => {
       setFile(null);
       if (fileInputRef.current) fileInputRef.current.value = ""; 
       setError("");
-    } catch (error: any) {
-      setError(error.response?.data?.error || "Network error. Please try again later.");
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.error || "Network error. Please try again later.");
+      } else {
+        setError("Unknown error occurred.");
+      }
     }
   };
 
