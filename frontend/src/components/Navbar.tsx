@@ -7,6 +7,8 @@ type NavbarProps = {
 
 const Navbar: React.FC<NavbarProps> = ({ setActivePage }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const isMobile = window.innerWidth <= 768;
+  const shouldShowLinks = !isMobile || menuOpen;
 
   return (
     <nav className="navbar">
@@ -18,7 +20,7 @@ const Navbar: React.FC<NavbarProps> = ({ setActivePage }) => {
         ☰
       </div>
 
-      <div className={`navbar-links ${menuOpen ? "active" : ""}`}>
+      <div className={`navbar-links ${shouldShowLinks ? "active" : ""}`}>
         <button onClick={() => setActivePage("view")}>View</button>
         <button onClick={() => setActivePage("create")}>Create</button>
         <button onClick={() => setActivePage("home")}>Home</button>

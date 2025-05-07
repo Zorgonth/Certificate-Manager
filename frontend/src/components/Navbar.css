@@ -57,6 +57,7 @@
  @media (max-width: 768px) {
 	.hamburger {
 	  display: block;
+	  z-index: 999;
 	}
  
 	.navbar {
