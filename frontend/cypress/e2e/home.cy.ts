@@ -1,13 +1,14 @@
-describe('Homepage', () => {
-  beforeEach(() => {
+/// <reference types="cypress" />
+describe('Homepage', (): void => {
+  beforeEach((): void => {
     cy.visit('/');
   });
 
-  it('should load the homepage and display expected text', () => {
+  it('should load the homepage and display expected text', (): void => {
     cy.contains('h2', 'Welcome to Certificate Management').should('be.visible'); 
   });
 
-  it('should display navbar links on mobile after hamburger click', () => {
+  it('should display navbar links on mobile after hamburger click', (): void => {
     
   
     cy.get('.navbar').should('exist');
@@ -20,7 +21,7 @@ describe('Homepage', () => {
     cy.contains('button', 'Home').should('be.visible');
   });
 
-  it('should navigate to Home when Home button is clicked', () => {
+  it('should navigate to Home when Home button is clicked', ():void  => {
     
     cy.get('.navbar').should('exist');
   
@@ -31,7 +32,7 @@ describe('Homepage', () => {
     cy.contains('h2', 'Welcome to Certificate Management').should('be.visible'); 
   });
 
-  it('should navigate to Create when Create button is clicked', () => {
+  it('should navigate to Create when Create button is clicked', (): void => {
     cy.contains('button', 'Create').click();
   
     cy.contains('h3', 'Upload Your Certificate').should('be.visible');
