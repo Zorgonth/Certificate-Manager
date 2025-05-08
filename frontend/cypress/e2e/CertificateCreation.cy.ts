@@ -8,9 +8,11 @@ describe('Create Certificate Form', (): void => {
     it('should successfully submit the form with valid data and file', (): void => {
       
      cy.intercept('POST', '/api/v1/certificates/create').as('createCertificate');
-      
-      cy.get('input#name').type('Test');
-      cy.get('input#provider').type('DMA');
+      const r_suffix :number= Math.floor(Math.random() * 10000);
+      const name:string = `Test-${r_suffix}`;
+      const provider:string = `DMA-${r_suffix}`;
+      cy.get('input#name').type(name);
+      cy.get('input#provider').type(provider);
       cy.get('input#issuedAt').type('2024-05-01');
       cy.get('input#expiresAt').type('2026-05-01');
   
@@ -34,8 +36,8 @@ describe('Create Certificate Form', (): void => {
       cy.contains('Certificate Manager').should('be.visible');
 
       cy.get('.MuiDataGrid-virtualScroller').within(():void  => {
-        cy.contains('Test').should('be.visible');
-        cy.contains('DMA').should('be.visible');
+        cy.contains(name).should('be.visible');
+        cy.contains(provider).should('be.visible');
       });
       
     });
