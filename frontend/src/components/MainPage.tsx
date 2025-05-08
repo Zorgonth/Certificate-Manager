@@ -1,7 +1,7 @@
-import React from "react";
+import React, {JSX} from "react";
 import "./MainPage.css";
 
-const Home: React.FC = () => {
+const Home: React.FC = () : JSX.Element => {
   return (
     <div className="home-container">
       <div className="home-content">

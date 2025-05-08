@@ -1,8 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, JSX } from "react";
 import axios from "axios";
 import "./Create.css";
 
-const CreateCertificate = ({ onCreate }: { onCreate: () => void }) => {
+const CreateCertificate = ({ onCreate }: { onCreate: () => void }): JSX.Element => {
   const [name, setName] = useState("");
   const [provider, setProvider] = useState("");
   const [issuedAt, setIssuedAt] = useState("");
@@ -12,7 +12,7 @@ const CreateCertificate = ({ onCreate }: { onCreate: () => void }) => {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFile = e.target.files[0];
 
@@ -36,7 +36,7 @@ const CreateCertificate = ({ onCreate }: { onCreate: () => void }) => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
 
     const certificateData = {
@@ -83,19 +83,19 @@ const CreateCertificate = ({ onCreate }: { onCreate: () => void }) => {
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Certificate Name</label>
-            <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+            <input type="text" id="name" value={name} onChange={(e) : void => setName(e.target.value)} required />
           </div>
           <div className="form-group">
             <label htmlFor="provider">Provider</label>
-            <input type="text" id="provider" value={provider} onChange={(e) => setProvider(e.target.value)} required />
+            <input type="text" id="provider" value={provider} onChange={(e) : void => setProvider(e.target.value)} required />
           </div>
           <div className="form-group">
             <label htmlFor="issuedAt">Issue Date</label>
-            <input type="date" id="issuedAt" value={issuedAt} onChange={(e) => setIssuedAt(e.target.value)} required />
+            <input type="date" id="issuedAt" value={issuedAt} onChange={(e) : void => setIssuedAt(e.target.value)} required />
           </div>
           <div className="form-group">
             <label htmlFor="expiresAt">Expiry Date (optional)</label>
-            <input type="date" id="expiresAt" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} />
+            <input type="date" id="expiresAt" value={expiresAt} onChange={(e) : void => setExpiresAt(e.target.value)} />
           </div>
           <div className="form-group">
             <label htmlFor="file">Certificate File (PDF, PNG, JPEG)</label>

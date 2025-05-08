@@ -22,7 +22,7 @@ const Table: FC = (): JSX.Element => {
     pageSize: 10,
   });
 
-  useEffect(() => {
+  useEffect(() : void => {
     const fetchCertificates = async (): Promise<void> => {
       try {
         const response = await axios.get<Certificate[]>("/certificates/getall");
@@ -46,10 +46,10 @@ const Table: FC = (): JSX.Element => {
       return;
     }
 
-    const selectedCertificates = certificates.filter((certificate) =>
+    const selectedCertificates = certificates.filter((certificate) : boolean =>
       selectedRows.includes(certificate.id)
     );
-    selectedCertificates.forEach(async (certificate) => {
+    selectedCertificates.forEach(async (certificate): Promise<void> => {
       try {
         const response = await axios.get(`/certificates/download/`, {
           responseType: "blob", 
@@ -117,14 +117,15 @@ const Table: FC = (): JSX.Element => {
     if (!window.confirm("Are you sure you want to delete the selected certificates?")) return;
     try {
       await Promise.all(
-        selectedRows.map(async (id) => {
+        selectedRows.map(async (id): Promise<void> => {
           await axios.delete("/certificates/delete", {
             headers: { "certificate-id": String(id) },
+            data: {},
           });
         })
       );
       alert("Certificates deleted successfully!");
-      setCertificates((prev) => prev.filter((c) => !selectedRows.includes(c.id)));
+      setCertificates((prev): Certificate[] => prev.filter((c): boolean => !selectedRows.includes(c.id)));
       setSelectedRows([]);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -143,7 +144,7 @@ const Table: FC = (): JSX.Element => {
       field: "issued_at",
       headerName: "Issue Date",
       width: 150,
-      renderCell: (params) => (
+      renderCell: (params) : JSX.Element=> (
         <Typography>{new Date(params.value as string).toLocaleDateString()}</Typography>
       ),
     },
@@ -151,7 +152,7 @@ const Table: FC = (): JSX.Element => {
       field: "expires_at",
       headerName: "Expiry Date",
       width: 150,
-      renderCell: (params) => (
+      renderCell: (params) : JSX.Element => (
         <Typography>{params.value ? new Date(params.value as string).toLocaleDateString() : "N/A"}</Typography>
       ),
     },
@@ -210,8 +211,8 @@ const Table: FC = (): JSX.Element => {
           paginationModel={paginationModel}
           pageSizeOptions={[10, 20, 30]}
           checkboxSelection
-          onRowSelectionModelChange={(ids: GridRowSelectionModel) => {
-            const selectedIds = ids.map((id) => Number(id));
+          onRowSelectionModelChange={(ids: GridRowSelectionModel): void => {
+            const selectedIds = ids.map((id): number => Number(id));
             setSelectedRows(selectedIds);
            }}
           onPaginationModelChange={setPaginationModel}
