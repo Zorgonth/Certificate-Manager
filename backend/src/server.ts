@@ -23,11 +23,12 @@ export const logger = winston.createLogger({
             format: winston.format.simple(),
         }),
         new winston.transports.File({
-            filename: 'server.log',
+            filename: process.env.NODE_ENV === 'mock' ? 'server.mock.log' : 'server.log',
             level: 'info',  
         })
     ]
 })
+
 
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*'); 

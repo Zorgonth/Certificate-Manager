@@ -155,7 +155,11 @@ const deleteCertificate = async (req: Request, res: Response) => {
         }   
         await prisma.certificate.delete({
           where: { id: Number(id) },
-        }); 
+        });
+        const remaining: Number = await prisma.certificate.count();
+        if (remaining === 0) {
+          await prisma.$executeRawUnsafe(`DELETE FROM sqlite_sequence WHERE name = 'Certificate'`);
+        }
         res.status(200).json({ message: "Certificate deleted successfully" });
         return ;
     } catch (e: unknown) { 
