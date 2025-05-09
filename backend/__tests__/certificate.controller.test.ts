@@ -1,17 +1,18 @@
 import request from 'supertest';
 import app, { startServer } from '../src/server';
+import { Server } from 'http'
 
-describe('Certificate Controller', () => {
-	let server: any;	
-	beforeAll(async () => {
+describe('Certificate Controller', (): void => {
+	let server: Server;
+	beforeAll(async (): Promise<void> => {
 	  server = await startServer();
 	});	
-	afterAll((done) => {
+	afterAll((done): void => {
 	  server.close(done);
 	});
 	let certificateId: number;
 
-	it('should create a certificate successfully', async () => {
+	it('should create a certificate successfully', async (): Promise<void> => {
 	 	const response = await request(app)
 	 	  .post('/api/v1/certificates/create')
 	 	  .set('Content-Type', 'multipart/form-data')
@@ -27,7 +28,7 @@ describe('Certificate Controller', () => {
 	 	certificateId = response.body.id; 
 	});
 
-	it('should return 400 for missing fields', async () => {
+	it('should return 400 for missing fields', async (): Promise<void> => {
 	  const response = await request(app)
 	    .post('/api/v1/certificates/create')
 	    .send({});	
@@ -35,7 +36,7 @@ describe('Certificate Controller', () => {
 	  expect(response.body.error).toBe('Missing certificate data');
 	});
 
-	it('should retrieve all certificates', async () => {
+	it('should retrieve all certificates', async (): Promise<void> => {
 	  const response = await request(app)
 	    .get('/api/v1/certificates/getall');	
 	  expect(response.status).toBe(200);
@@ -43,7 +44,7 @@ describe('Certificate Controller', () => {
 	  expect(response.body.length).toBeGreaterThan(0);
 	});	
 
-	it('should delete a certificate successfully', async () => {
+	it('should delete a certificate successfully', async (): Promise<void> => {
 	  const response = await request(app)
 	    .delete('/api/v1/certificates/delete')
 	    .set('certificate-id', certificateId.toString());
@@ -51,7 +52,7 @@ describe('Certificate Controller', () => {
 	  expect(response.body.message).toBe('Certificate deleted successfully');
 	});
 
-	it('should return 404 when deleting a non-existent certificate', async () => {
+	it('should return 404 when deleting a non-existent certificate', async (): Promise<void> => {
 	  const response = await request(app)
 	    .delete('/api/v1/certificates/delete')
 	    .set('certificate-id', '999999');	

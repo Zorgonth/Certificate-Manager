@@ -53,7 +53,7 @@
    cd backend
    
    # This runs all the tests that are in the __tests__ directory
-   npx jest
+   npm run jest
    ```
 
 4. To use the mock database for testing purposes, follow these steps:

@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "jest": "cross-env DATABASE_URL=file:./mock.db npx jest",
     "start": "cross-env DATABASE_URL=file:./dev.db ts-node-dev --respawn --transpile-only --exit-child src/server.ts",
     "start:mock": "cross-env NODE_ENV=mock DATABASE_URL=file:./mock.db ts-node-dev --respawn --transpile-only --exit-child src/server.ts",
     "db:migrate": "cross-env DATABASE_URL=file:./dev.db npx prisma migrate dev --name user-entity --create-only && npx prisma generate",

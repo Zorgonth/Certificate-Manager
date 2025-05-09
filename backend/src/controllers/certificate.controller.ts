@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { prisma } from '../server'
-import {Certificate} from "../interfaces/certificate";
 import path from 'path';
 import fs from 'fs';
 import archiver from 'archiver';
@@ -8,7 +7,7 @@ import * as mime from 'mime-types';
 import { v4 as uuidv4 } from 'uuid';
 import { logger } from '../server';
 
-const createCertificate = async (req: Request, res: Response) => {
+const createCertificate = async (req: Request, res: Response): Promise<void> => {
     try {
         if (!req.body.certificateData) {
           res.status(400).json({ error: 'Missing certificate data' });
@@ -62,7 +61,7 @@ const createCertificate = async (req: Request, res: Response) => {
   }
 };
 
-const getCertificates = async (req: Request, res: Response) => {
+const getCertificates = async (req: Request, res: Response): Promise<void> => {
     try {
         const certificates = await prisma.certificate.findMany({
             select: {
@@ -86,7 +85,7 @@ const getCertificates = async (req: Request, res: Response) => {
   }
 };
 
-const downloadCertificate = async (req: Request, res: Response) => {
+const downloadCertificate = async (req: Request, res: Response): Promise<void> => {
     try {
         const id = req.headers["certificate-id"];
     
@@ -129,7 +128,7 @@ const downloadCertificate = async (req: Request, res: Response) => {
   }
 };
 
-const deleteCertificate = async (req: Request, res: Response) => {
+const deleteCertificate = async (req: Request, res: Response): Promise<void> => {
     try {
         const id = req.headers["certificate-id"];   
         if (!id) {
@@ -146,7 +145,7 @@ const deleteCertificate = async (req: Request, res: Response) => {
         }   
         if (certificate.filename) {
           const filePath = path.join(__dirname, '../../uploads', certificate.filename);
-          await fs.unlink(filePath, (err) => {
+          await fs.unlink(filePath, (err): void => {
             if (err) {
               res.status(500).json({ error: "Error deleting certificate file" });
               return ;
@@ -156,7 +155,7 @@ const deleteCertificate = async (req: Request, res: Response) => {
         await prisma.certificate.delete({
           where: { id: Number(id) },
         });
-        const remaining: Number = await prisma.certificate.count();
+        const remaining: number = await prisma.certificate.count();
         if (remaining === 0) {
           await prisma.$executeRawUnsafe(`DELETE FROM sqlite_sequence WHERE name = 'Certificate'`);
         }
@@ -173,7 +172,7 @@ const deleteCertificate = async (req: Request, res: Response) => {
   }
 };
 
-const downloadAllCertificates = async (req: Request, res: Response) => {
+const downloadAllCertificates = async (req: Request, res: Response): Promise<void> => {
   try {
       const certificates = await prisma.certificate.findMany({
           select: { filename: true, name: true },

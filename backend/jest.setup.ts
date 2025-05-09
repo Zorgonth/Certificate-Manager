@@ -1,5 +1,5 @@
 import 'jest-extended';
 
-beforeEach(() => {
+beforeEach(() : void=> {
   jest.clearAllMocks();
 });
