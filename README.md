@@ -33,6 +33,8 @@
    npm run start
    ```
 
+
+
 2. In a separate terminal, we set up the React frontend application
    ```sh
    # from the root directory
@@ -53,4 +55,26 @@
    # This runs all the tests that are in the __tests__ directory
    npx jest
    ```
-You are ready! Happy coding :)
+
+4. To use the mock database for testing purposes, follow these steps:
+   ```sh
+   # from the root directory
+   cd backend
+
+   # Create and push the schema to the mock SQLite database
+   npm run push:mock
+
+   # Start the backend server using the mock.db file
+   npm run start:mock
+   ```
+5. To run the frontend tests using cypress, follow these steps:
+   ```sh
+   #from the root directory
+   cd frontend
+
+   # Run all Cypress E2E tests headlessly
+   npm run cy:run
+
+   # Or launch the Cypress UI for interactive testing
+   npm run cy:open
+   ```
