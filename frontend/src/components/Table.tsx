@@ -93,7 +93,18 @@ const Table: FC = (): JSX.Element => {
     try {
       const response = await axios.get("/certificates/downloadall", {
         responseType: "blob",
+        validateStatus: (): boolean => true,
       });
+      if (response.status !== 200) {
+        const text = await response.data.text();
+        try {
+          const json = JSON.parse(text);
+          setError(json.error || "Download failed with unknown error.");
+        } catch {
+          setError("Download failed and response could not be parsed.");
+        }
+        return;
+      }
       const blob = new Blob([response.data], { type: "application/zip" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);

@@ -42,4 +42,12 @@ describe('Homepage', (): void => {
     cy.get('input#issuedAt').should('exist');
     cy.get('input#file').should('exist');
   });
+  it('should navigate to View when View button is clicked', (): void => {
+    cy.contains('button', 'View').click();
+
+    cy.contains('Certificate Manager');
+    cy.contains('button', 'Delete').should('exist');
+    cy.contains('button', 'Download').should('exist');
+    cy.contains('button', 'Download All').should('exist');
+  });
 });
